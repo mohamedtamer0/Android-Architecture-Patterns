@@ -10,31 +10,36 @@ import android.widget.TextView;
 import com.example.architecture_patterns.R;
 import com.example.architecture_patterns.model.MovieModel;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-    TextView movieName;
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, MovieView {
+
+    TextView movieNameTV;
     Button btn;
+    MoviePresenter presenter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        movieName = findViewById(R.id.textView);
+        movieNameTV = findViewById(R.id.textView);
         btn = findViewById(R.id.button);
+
         btn.setOnClickListener(this);
-    }
+        presenter = new MoviePresenter(this);
 
-    public MovieModel getMovieFromDatabase() {
-        return new MovieModel("The Good Doctor","2-2-20121","Great", 1);
-    }
 
-    public void getMovie() {
-        movieName.setText(getMovieFromDatabase().getName());
     }
 
 
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button) {
-            getMovie();
+            presenter.getMovieName();
         }
+    }
+
+
+    @Override
+    public void onGetMovieName(String movieName) {
+        movieNameTV.setText(movieName);
     }
 }
