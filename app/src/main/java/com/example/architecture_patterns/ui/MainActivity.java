@@ -1,6 +1,8 @@
 package com.example.architecture_patterns.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Bundle;
 import android.view.View;
@@ -10,11 +12,12 @@ import android.widget.TextView;
 import com.example.architecture_patterns.R;
 import com.example.architecture_patterns.model.MovieModel;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, MovieView {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     TextView movieNameTV;
     Button btn;
-    MoviePresenter presenter;
+
+    MovieViewModel movieViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,10 +25,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         movieNameTV = findViewById(R.id.textView);
         btn = findViewById(R.id.button);
-
         btn.setOnClickListener(this);
-        presenter = new MoviePresenter(this);
 
+        movieViewModel = new ViewModelProvider(this).get(MovieViewModel.class);
+        movieViewModel.movieNameMutableLiveData.observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(String s) {
+                movieNameTV.setText(s);
+            }
+        });
 
     }
 
@@ -33,13 +41,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         if (view.getId() == R.id.button) {
-            presenter.getMovieName();
+            movieViewModel.getMovieName();
         }
     }
 
-
-    @Override
-    public void onGetMovieName(String movieName) {
-        movieNameTV.setText(movieName);
-    }
 }
