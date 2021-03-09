@@ -8,7 +8,7 @@ import com.example.architecture_patterns.model.MovieModel;
 
 public class MovieViewModel extends ViewModel {
 
-    MutableLiveData<String> movieNameMutableLiveData = new MutableLiveData<>();
+    public MutableLiveData<String> movieNameMutableLiveData = new MutableLiveData<>();
 
     public void getMovieName() {
         String movieName = getMovieFromDatabase().getName();
